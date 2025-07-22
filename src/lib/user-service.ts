@@ -3,7 +3,7 @@
 
 import { db } from "@/lib/firebase";
 import { doc, getDoc, updateDoc, setDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
-import type { User } from "./mock-data";
+import type { User } from "./types";
 
 export const getUserProfile = async (userId: string): Promise<User | null> => {
     try {

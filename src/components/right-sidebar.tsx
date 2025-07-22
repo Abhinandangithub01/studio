@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { getTrendingPosts } from "@/lib/post-service";
-import type { Post } from "@/lib/mock-data";
+import type { Post } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function RightSidebar() {

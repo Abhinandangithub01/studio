@@ -1,47 +1,88 @@
-
 rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Users: Publicly readable, but only the user can write to their own document.
+    // Helper function to check if a user is authenticated
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Helper function to check if the requesting user's ID matches the resource's userId
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // USERS collection
     match /users/{userId} {
-      allow read: if true;
-      allow write: if request.auth.uid == userId;
+      // Anyone can read a user's public profile
+      allow get: if true;
+      // Anyone authenticated can create their own user document
+      allow create: if isSignedIn() && isOwner(userId);
+      // Only the owner of the profile can update it
+      allow update: if isSignedIn() && isOwner(userId);
+      // Users cannot delete their profiles for this app's logic
+      allow delete: if false;
 
-      // Following/Followers: Only the user can manage their own follow list.
-      match /following/{targetUserId} {
-        allow read: if true;
-        allow write: if request.auth.uid == userId;
+      // FOLLOWERS and FOLLOWING subcollections
+      match /followers/{followerId} {
+        // Any authenticated user can read who follows a user
+        allow get: if true;
+        // Authenticated users can create a follower document (i.e., follow someone)
+        // The creator must be the one being recorded as the follower
+        allow create: if isSignedIn() && isOwner(followerId);
+        // Users can delete their own follower record (unfollow)
+        allow delete: if isSignedIn() && isOwner(followerId);
       }
-      match /followers/{followerUserId} {
-        allow read: if true;
-        allow write: if request.auth.uid == followerUserId;
+      
+      match /following/{followingId} {
+        // Any authenticated user can read who a user is following
+        allow get: if true;
+        // Authenticated users can add to their own following list.
+        // The userId in the path must match the authenticated user.
+        allow create: if isSignedIn() && isOwner(userId);
+        // Authenticated users can remove from their own following list.
+        allow delete: if isSignedIn() && isOwner(userId);
       }
     }
 
-    // Posts: Readable by everyone, writable only by authenticated users.
-    // Users can only edit/delete their own posts.
+    // POSTS collection
     match /posts/{postId} {
-      allow read: if true;
-      allow create: if request.auth != null;
-      allow update, delete: if request.auth.uid == resource.data.userId;
+      // Anyone can read a post
+      allow get, list: if true;
+      // Only authenticated users can create a post, and they must be the owner
+      allow create: if isSignedIn() && isOwner(request.resource.data.userId);
+      // Only the author of a post can update it
+      allow update: if isSignedIn() && isOwner(resource.data.userId);
+      // Only the author can delete a post
+      allow delete: if isSignedIn() && isOwner(resource.data.userId);
 
-      // Comments: Readable by everyone, writable only by authenticated users.
+      // COMMENTS subcollection
       match /comments/{commentId} {
-        allow read: if true;
-        allow create: if request.auth != null;
-        allow update, delete: if request.auth.uid == resource.data.userId;
+         // Anyone can read comments
+        allow get, list: if true;
+        // Authenticated users can create comments, and must be the owner
+        allow create: if isSignedIn() && isOwner(request.resource.data.userId);
+        // Comment authors can update their own comments
+        allow update: if isSignedIn() && isOwner(resource.data.userId);
+        // Comment authors can delete their own comments
+        allow delete: if isSignedIn() && isOwner(resource.data.userId);
       }
     }
 
-    // Showcases: Readable by everyone, writable only by authenticated users.
-    // Users can only edit/delete their own showcases.
+    // SHOWCASES collection
     match /showcases/{showcaseId} {
-      allow read: if true;
-      allow create: if request.auth != null;
-      allow update: if request.auth != null && (request.resource.data.upvotes == resource.data.upvotes + 1 || request.auth.uid == resource.data.userId);
-      allow delete: if request.auth.uid == resource.data.userId;
+        // Anyone can read/list showcases
+        allow get, list: if true;
+        // Authenticated users can create showcases, and must be the owner
+        allow create: if isSignedIn() && isOwner(request.resource.data.userId);
+        // Only the author of a showcase can update its details (description, tags, etc.)
+        // Upvotes are handled separately
+        allow update: if isSignedIn() && isOwner(resource.data.userId) && request.resource.data.upvotes == resource.data.upvotes;
+        // Allow upvoting
+        allow update: if isSignedIn() && request.resource.data.upvotes == resource.data.upvotes + 1;
+        // Showcase authors can delete them
+        allow delete: if isSignedIn() && isOwner(resource.data.userId);
     }
   }
 }

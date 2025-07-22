@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import { auth } from "@/lib/firebase";
 import { getUserProfile } from "@/lib/user-service";
-import type { User } from "@/lib/mock-data";
+import type { User } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AppLayout } from "@/components/app-layout";
 import { ProfileClientPage } from "@/components/profile-client-page";

@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, addDoc, getDocs, doc, updateDoc, increment, serverTimestamp, query, orderBy, where } from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, updateDoc, increment, serverTimestamp, query, orderBy, where, getDoc } from "firebase/firestore";
 import type { Showcase } from "./types";
 import { Timestamp } from "firebase/firestore";
 
@@ -33,7 +33,7 @@ export const getShowcases = async (): Promise<Showcase[]> => {
             id: doc.id,
             ...data,
             // Convert Firestore Timestamp to a serializable format if necessary
-            createdAt: (data.createdAt as Timestamp)?.toDate ? (data.createdAt as Timestamp).toDate().toISOString() : new Date().toISOString(),
+            createdAt: (data.createdAt as Timestamp)?.toDate ? (data.createdAt as Timestamp).toISOString() : new Date().toISOString(),
         } as Showcase
     });
     return showcaseList;
@@ -49,7 +49,7 @@ export const getShowcasesByUserId = async(userId: string): Promise<Showcase[]> =
         return {
             id: doc.id,
             ...data,
-            createdAt: (data.createdAt as Timestamp)?.toDate ? (data.createdAt as Timestamp).toDate().toISOString() : new Date().toISOString(),
+            createdAt: (data.createdAt as Timestamp)?.toDate ? (data.createdAt as Timestamp).toISOString() : new Date().toISOString(),
         } as Showcase
     });
     return showcaseList;
