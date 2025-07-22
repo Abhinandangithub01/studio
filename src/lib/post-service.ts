@@ -2,7 +2,7 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, addDoc, getDocs, doc, getDoc, query, orderBy, serverTimestamp, Timestamp } from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, getDoc, query, orderBy, serverTimestamp, Timestamp, limit } from "firebase/firestore";
 import type { Post } from "./mock-data";
 import { getUserProfile } from "./user-service";
 
@@ -66,3 +66,17 @@ export const getPost = async (postId: string): Promise<Post | null> => {
         return null;
     }
 }
+
+export const getTrendingPosts = async (): Promise<Post[]> => {
+    const postsCol = collection(db, "posts");
+    const q = query(postsCol, orderBy("reactions", "desc"), limit(10));
+    const postSnapshot = await getDocs(q);
+    const postList = postSnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+            id: doc.id,
+            ...data,
+        } as Post;
+    });
+    return postList;
+};
