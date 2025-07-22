@@ -17,6 +17,16 @@ export type Project = {
   featured: boolean;
 };
 
+export type Showcase = {
+  id: string;
+  userId: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  tags: string[];
+  upvotes: number;
+};
+
 export type Post = {
   id: string;
   userId: string;
@@ -56,6 +66,37 @@ export const mockUser: User = {
     { name: 'Portfolio', url: '#' },
   ],
 };
+
+export const mockShowcases: Showcase[] = [
+  {
+    id: 'proj-1',
+    userId: 'user-1',
+    title: 'E-commerce Platform Redesign',
+    description: 'Led the complete redesign of a major e-commerce platform, improving user engagement by 25% and conversion rates by 15%.',
+    imageUrl: 'https://placehold.co/600x400',
+    tags: ['UI/UX', 'E-commerce', 'Product Management'],
+    upvotes: 128,
+  },
+  {
+    id: 'proj-2',
+    userId: 'user-2',
+    title: 'SaaS Dashboard for Analytics',
+    description: 'Designed and shipped a comprehensive analytics dashboard for a B2B SaaS product, providing users with actionable insights.',
+    imageUrl: 'https://placehold.co/600x400',
+    tags: ['SaaS', 'No-Code', 'Figma'],
+    upvotes: 97,
+  },
+  {
+    id: 'proj-3',
+    userId: 'user-3',
+    title: 'Mobile App for mindfulness',
+    description: 'A concept for a mobile app to help users practice mindfulness through guided meditations and journaling.',
+    imageUrl: 'https://placehold.co/600x400',
+    tags: ['Mobile App', 'UI/UX', 'Wellness'],
+    upvotes: 63,
+  },
+];
+
 
 export const mockProjects: Project[] = [
   {
