@@ -1,20 +1,19 @@
 import type { ReactNode } from 'react';
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { MainSidebar } from "@/components/main-sidebar";
 import { AppHeader } from "@/components/app-header";
+import { RightSidebar } from '@/components/right-sidebar';
 
 export function AppLayout({ children }: { children: ReactNode }) {
   return (
-    <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-muted/40">
+    <div className="min-h-screen bg-black">
+      <AppHeader />
+      <div className="grid md:grid-cols-[240px_1fr] lg:grid-cols-[240px_1fr_300px] gap-4 p-4 items-start">
         <MainSidebar />
-        <div className="flex flex-1 flex-col">
-          <AppHeader />
-          <main className="flex-1 gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-            {children}
-          </main>
-        </div>
+        <main>
+          {children}
+        </main>
+        <RightSidebar />
       </div>
-    </SidebarProvider>
+    </div>
   )
 }

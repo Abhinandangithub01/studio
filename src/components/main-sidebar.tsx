@@ -1,79 +1,130 @@
 import Link from "next/link";
 import {
-  Bell,
   Home,
-  LineChart,
-  Package2,
+  BookOpen,
+  Podcast,
+  Video,
+  Tags,
+  GraduationCap,
   Trophy,
-  Users,
   Lightbulb,
+  Heart,
+  Star,
+  User,
+  Info,
+  ShoppingBag,
+  ShieldCheck,
+  FileText,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { mockUser } from "@/lib/mock-data";
+import { Separator } from "./ui/separator";
 
 export function MainSidebar() {
   return (
-    <div className="hidden border-r bg-background md:block">
-      <div className="flex h-full max-h-screen flex-col gap-2">
-        <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-          <Link href="/" className="flex items-center gap-2 font-semibold">
-            <Package2 className="h-6 w-6 text-secondary" />
-            <span className="font-headline text-lg">ProComm Hub</span>
-          </Link>
-        </div>
-        <div className="flex-1">
-          <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-            <Link
-              href="/"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <Home className="h-4 w-4" />
-              Home
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <Lightbulb className="h-4 w-4" />
-              Discover
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center gap-3 rounded-lg bg-muted px-3 py-2 text-primary transition-all hover:text-primary"
-            >
-              <Trophy className="h-4 w-4" />
-              Competitions
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <Users className="h-4 w-4" />
-              Leaderboards
-            </Link>
-          </nav>
-        </div>
-        <div className="mt-auto p-4">
-          <Card>
-            <CardHeader className="p-2 pt-0 md:p-4">
-              <Link href="/profile">
-                <div className="flex items-center gap-4">
-                  <Avatar className="h-10 w-10 border">
-                    <AvatarImage src={mockUser.avatarUrl} alt={mockUser.name} />
-                    <AvatarFallback>{mockUser.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div className="grid gap-0.5">
-                    <p className="font-semibold text-sm">{mockUser.name}</p>
-                    <p className="text-xs text-muted-foreground">View Profile</p>
-                  </div>
-                </div>
-              </Link>
-            </CardHeader>
-          </Card>
-        </div>
-      </div>
-    </div>
+    <aside className="hidden md:block">
+      <nav className="grid gap-1 text-sm font-medium">
+        <Link
+          href="#"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent"
+        >
+          <Home className="h-4 w-4" />
+          Home
+        </Link>
+        <Link
+          href="#"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent"
+        >
+          <BookOpen className="h-4 w-4" />
+          Reading List
+        </Link>
+        <Link
+          href="#"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent"
+        >
+          <Podcast className="h-4 w-4" />
+          Podcasts
+        </Link>
+        <Link
+          href="#"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent"
+        >
+          <Video className="h-4 w-4" />
+          Videos
+        </Link>
+        <Link
+          href="#"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent"
+        >
+          <Tags className="h-4 w-4" />
+          Tags
+        </Link>
+        <Link
+          href="#"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent"
+        >
+          <GraduationCap className="h-4 w-4" />
+          DEV Education Tracks
+        </Link>
+        <Link
+          href="#"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent"
+        >
+          <Trophy className="h-4 w-4" />
+          DEV Challenges
+        </Link>
+        <Link
+          href="#"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent"
+        >
+          <Lightbulb className="h-4 w-4" />
+          DEV Help
+        </Link>
+        <Link
+          href="#"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent"
+        >
+          <Heart className="h-4 w-4" />
+          Advertise on DEV
+        </Link>
+        <Link
+          href="#"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent"
+        >
+          <Star className="h-4 w-4" />
+          DEV Showcase
+        </Link>
+        <Link
+          href="#"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent"
+        >
+          <Info className="h-4 w-4" />
+          About
+        </Link>
+        <Link
+          href="#"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent"
+        >
+          <User className="h-4 w-4" />
+          Contact
+        </Link>
+        <Link
+          href="#"
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent"
+        >
+          <ShoppingBag className="h-4 w-4" />
+          Forem Shop
+        </Link>
+        <Separator className="my-2" />
+        <p className="px-3 text-muted-foreground text-sm">Other</p>
+         <Link href="#" className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent">
+            <ShieldCheck className="h-4 w-4" /> Code of Conduct
+        </Link>
+         <Link href="#" className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent">
+            <FileText className="h-4 w-4" /> Privacy Policy
+        </Link>
+         <Link href="#" className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-accent">
+            <FileText className="h-4 w-4" /> Terms of use
+        </Link>
+      </nav>
+    </aside>
   );
 }
