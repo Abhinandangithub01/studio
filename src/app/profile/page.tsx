@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Linkedin, Twitter, Link as LinkIcon, Edit, Award, Coffee } from "lucide-react";
+import { Linkedin, Twitter, Link as LinkIcon, Edit, Award, Coffee, Youtube, Github } from "lucide-react";
 
 export default function ProfilePage() {
   const featuredProjects = mockProjects.filter(p => p.featured);
@@ -19,6 +19,8 @@ export default function ProfilePage() {
     switch (name.toLowerCase()) {
       case 'linkedin': return <Linkedin className="h-4 w-4" />;
       case 'twitter': return <Twitter className="h-4 w-4" />;
+      case 'youtube': return <Youtube className="h-4 w-4" />;
+      case 'github': return <Github className="h-4 w-4" />;
       default: return <LinkIcon className="h-4 w-4" />;
     }
   }
@@ -34,7 +36,8 @@ export default function ProfilePage() {
                 <AvatarFallback>{mockUser.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <h1 className="font-headline text-2xl font-bold">{mockUser.name}</h1>
-              <p className="text-muted-foreground">Product Manager</p>
+              <p className="text-muted-foreground">{mockUser.currentRole} at {mockUser.currentCompany}</p>
+              <p className="text-muted-foreground text-sm">{mockUser.education}</p>
               <div className="mt-4 flex gap-2">
                 <Button size="sm">
                   <Edit className="mr-2 h-4 w-4" /> Edit Profile

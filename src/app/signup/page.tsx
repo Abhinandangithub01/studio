@@ -35,7 +35,13 @@ export default function SignupPage() {
         bio: '',
         skills: [],
         avatarUrl: '',
-        socials: []
+        socials: [],
+        currentCompany: '',
+        currentRole: '',
+        education: '',
+        linkedinUrl: '',
+        youtubeUrl: '',
+        githubUrl: ''
       });
 
       toast({

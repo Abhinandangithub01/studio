@@ -6,6 +6,12 @@ export type User = {
   bio: string;
   skills: string[];
   socials: { name: string; url: string }[];
+  currentCompany?: string;
+  currentRole?: string;
+  education?: string;
+  linkedinUrl?: string;
+  youtubeUrl?: string;
+  githubUrl?: string;
 };
 
 export type Project = {
@@ -66,7 +72,12 @@ export const mockUser: User = {
     { name: 'LinkedIn', url: '#' },
     { name: 'Twitter', url: '#' },
     { name: 'Portfolio', url: '#' },
+    { name: 'YouTube', url: '#' },
+    { name: 'GitHub', url: '#' },
   ],
+  currentCompany: 'Nebulon, Inc.',
+  currentRole: 'Product Manager',
+  education: 'Stanford University',
 };
 
 export const mockShowcases: Showcase[] = [
@@ -175,7 +186,7 @@ export const mockComments: Comment[] = [
     }
 ]
 
-export const mockUsers: Record<string, Omit<User, 'id'>> = {
+export const mockUsers: Record<string, Omit<User, 'id' | 'currentCompany' | 'currentRole' | 'education'>> = {
     'user-1': {
         name: 'Alex Doe',
         avatarUrl: 'https://placehold.co/128x128',
