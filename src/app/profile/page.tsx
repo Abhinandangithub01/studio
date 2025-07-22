@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AppLayout } from "@/components/app-layout";
 import { ProjectCard } from "@/components/project-card";
-import { PostCard } from "@/components/post-card";
+import { DiscussionCard } from "@/components/discussion-card";
 import { mockUser, mockProjects, mockPosts, mockBadges } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -91,7 +91,7 @@ export default function ProfilePage() {
         <Tabs defaultValue="portfolio">
           <TabsList>
             <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
-            <TabsTrigger value="posts">Posts</TabsTrigger>
+            <TabsTrigger value="posts">Discussions</TabsTrigger>
           </TabsList>
           <TabsContent value="portfolio" className="mt-6">
             <div className="space-y-8">
@@ -116,7 +116,7 @@ export default function ProfilePage() {
           <TabsContent value="posts" className="mt-6">
             <div className="space-y-6">
                 {mockPosts.map(post => (
-                    <PostCard key={post.id} post={post} />
+                    <DiscussionCard key={post.id} post={post} />
                 ))}
             </div>
           </TabsContent>

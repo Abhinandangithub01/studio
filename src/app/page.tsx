@@ -1,5 +1,5 @@
 import { AppLayout } from '@/components/app-layout';
-import { PostCard } from '@/components/post-card';
+import { DiscussionCard } from '@/components/discussion-card';
 import { mockPosts } from '@/lib/mock-data';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -19,7 +19,7 @@ export default function Home() {
         </div>
         <div className="grid grid-cols-1 gap-4">
           {mockPosts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <DiscussionCard key={post.id} post={post} />
           ))}
         </div>
       </div>
