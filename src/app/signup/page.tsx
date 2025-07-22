@@ -59,7 +59,7 @@ export default function SignupPage() {
       <div className="w-full max-w-md">
         <Card>
           <CardHeader className="text-center">
-            <div className="mb-4 flex justify-center font-headline text-2xl font-bold text-primary">
+            <div className="mb-4 flex justify-center font-headline text-2xl font-bold text-foreground">
               Nebbulon
             </div>
             <CardTitle className="font-headline text-2xl">Join Nebbulon</CardTitle>

@@ -41,7 +41,7 @@ export function AppHeader() {
                     </SheetTrigger>
                     <SheetContent side="left" className="flex flex-col">
                         <nav className="grid gap-2 text-lg font-medium">
-                            <Link href="#" className="flex items-center gap-2 text-lg font-bold">
+                            <Link href="#" className="flex items-center gap-2 text-lg font-bold text-foreground">
                                 Nebbulon
                             </Link>
                             <Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary">
@@ -56,7 +56,7 @@ export function AppHeader() {
                         </nav>
                     </SheetContent>
                 </Sheet>
-                <Link href="/" className="hidden md:flex items-center gap-2 font-bold text-xl text-primary">
+                <Link href="/" className="hidden md:flex items-center gap-2 font-bold text-xl text-foreground">
                     Nebbulon
                 </Link>
             </div>
