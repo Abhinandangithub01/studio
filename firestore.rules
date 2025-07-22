@@ -6,41 +6,38 @@ service cloud.firestore {
 
     // Users Collection
     match /users/{userId} {
-      // Anyone can view a user's profile
-      allow read: if true;
-      // Only the authenticated user can create their own profile
-      allow create: if request.auth != null && request.auth.uid == userId;
-      // Only the authenticated user can update their own profile
-      allow update: if request.auth != null && request.auth.uid == userId;
-      // Nobody can delete user profiles
+      allow read: if request.auth != null;
+      allow create: if request.auth.uid == userId;
+      allow update: if request.auth.uid == userId;
       allow delete: if false;
+
+      // Followers and Following Subcollections
+      match /followers/{followerId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth.uid == followerId;
+        allow delete: if request.auth.uid == followerId;
+      }
+
+      match /following/{followingId} {
+        allow read: if request.auth != null;
+        allow create: if request.auth.uid == userId;
+        allow delete: if request.auth.uid == userId;
+      }
     }
 
     // Posts Collection
     match /posts/{postId} {
-      // Anyone can read posts
       allow read: if true;
-      // Authenticated users can create posts, ensuring the userId matches their own
-      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
-      // Only the author of the post can update or delete it
-      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth.uid == resource.data.userId;
     }
 
     // Showcases Collection
     match /showcases/{showcaseId} {
-      // Anyone can read showcases
-      allow read: if true;
-      // Authenticated users can create showcases
-      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
-      
-      // Allow the author to update any field, and any authenticated user to update only the upvotes
-      allow update: if request.auth != null && (
-        (resource.data.userId == request.auth.uid) ||
-        (request.resource.data.keys().hasOnly(['upvotes']) && request.resource.data.upvotes == resource.data.upvotes + 1)
-      );
-
-      // Only the author can delete a showcase
-      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
+        allow read: if true;
+        allow create: if request.auth != null;
+        allow update: if request.auth.uid == resource.data.userId || (request.auth.uid != null && request.resource.data.upvotes == resource.data.upvotes + 1);
+        allow delete: if request.auth.uid == resource.data.userId;
     }
   }
 }

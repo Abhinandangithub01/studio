@@ -2,9 +2,9 @@
 'use server';
 
 import { db } from "@/lib/firebase";
-import { collection, addDoc, getDocs, doc, getDoc, query, orderBy, serverTimestamp, Timestamp, limit } from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, getDoc, query, orderBy, serverTimestamp, Timestamp, limit, where, documentId } from "firebase/firestore";
 import type { Post } from "./mock-data";
-import { getUserProfile } from "./user-service";
+import { getUserProfile, getFollowingIds } from "./user-service";
 
 type PostInput = Omit<Post, "id" | "createdAt" | "views" | "reactions" | "commentsCount">;
 
@@ -41,6 +41,26 @@ export const getPosts = async (): Promise<Post[]> => {
     });
     return postList;
 };
+
+export const getPostsFromFollowing = async(userId: string): Promise<Post[]> => {
+    const followingIds = await getFollowingIds(userId);
+    if (followingIds.length === 0) {
+        return [];
+    }
+
+    const postsCol = collection(db, "posts");
+    const q = query(postsCol, where('userId', 'in', followingIds), orderBy("createdAt", "desc"));
+    const postSnapshot = await getDocs(q);
+     const postList = postSnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+            id: doc.id,
+            ...data,
+            createdAt: (data.createdAt as Timestamp)?.toDate ? (data.createdAt as Timestamp).toDate().toLocaleDateString() : 'Just now',
+        } as Post;
+    });
+    return postList;
+}
 
 export const getPost = async (postId: string): Promise<Post | null> => {
     try {

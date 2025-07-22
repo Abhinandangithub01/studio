@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import type { Post } from "@/lib/mock-data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,14 +19,16 @@ export function DiscussionCard({ post }: DiscussionCardProps) {
     <Card className="bg-card border-border">
       <CardHeader>
         <div className="flex items-center gap-4">
-          <Avatar className="h-10 w-10 border">
-            {authorAvatar && <AvatarImage src={authorAvatar} alt={authorName} />}
-            <AvatarFallback>{authorName.charAt(0)}</AvatarFallback>
-          </Avatar>
-          <div>
-            <p className="font-semibold">{authorName}</p>
-            <p className="text-sm text-muted-foreground">{post.createdAt as string}</p>
-          </div>
+          <Link href={`/profile/${post.userId}`} className="flex items-center gap-4">
+            <Avatar className="h-10 w-10 border">
+              {authorAvatar && <AvatarImage src={authorAvatar} alt={authorName} />}
+              <AvatarFallback>{authorName.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="font-semibold hover:text-primary">{authorName}</p>
+              <p className="text-sm text-muted-foreground">{post.createdAt as string}</p>
+            </div>
+          </Link>
         </div>
       </CardHeader>
       <CardContent className="space-y-4 pl-16">
