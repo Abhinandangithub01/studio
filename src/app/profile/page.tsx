@@ -4,16 +4,17 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
+import { AppLayout } from "@/components/app-layout";
 import { getUserProfile } from "@/lib/user-service";
 import type { User } from "@/lib/mock-data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProfileClientPage } from "@/components/profile-client-page";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function ProfilePage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isCurrentUser, setIsCurrentUser] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (userAuth) => {
@@ -21,7 +22,6 @@ export default function ProfilePage() {
         setLoading(true);
         const profile = await getUserProfile(userAuth.uid);
         setUser(profile);
-        setIsCurrentUser(true);
         setLoading(false);
       } else {
         router.push('/login');
@@ -33,6 +33,7 @@ export default function ProfilePage() {
 
   if (loading || !user) {
     return (
+      <AppLayout>
         <div className="space-y-8">
             <Card>
                 <CardContent className="p-6 flex flex-col md:flex-row gap-8">
@@ -51,12 +52,9 @@ export default function ProfilePage() {
                 </CardContent>
             </Card>
         </div>
+      </AppLayout>
     )
   }
 
-  return <ProfileClientPage user={user} isCurrentUser={isCurrentUser} />;
+  return <AppLayout><ProfileClientPage user={user} isCurrentUser={true} /></AppLayout>;
 }
-
-// Dummy components to avoid breaking the code while refactoring
-const Card = ({children}: {children: React.ReactNode}) => <div className="bg-card rounded-lg border">{children}</div>
-const CardContent = ({children, className}: {children: React.ReactNode, className?: string}) => <div className={className}>{children}</div>

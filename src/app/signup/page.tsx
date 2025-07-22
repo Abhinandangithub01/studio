@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,30 +27,23 @@ export default function SignupPage() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       
-      // Create user document in Firestore
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
         name: fullName,
         email: user.email,
         bio: '',
         skills: [],
-        avatarUrl: '',
+        avatarUrl: `https://placehold.co/128x128.png?text=${fullName.charAt(0)}`,
         socials: [],
         currentCompany: '',
         currentRole: '',
         education: '',
-        linkedinUrl: '',
-        youtubeUrl: '',
-        githubUrl: ''
+        createdAt: serverTimestamp()
       });
 
-      toast({
-        title: "Account Created",
-        description: "You have successfully signed up!",
-      });
       router.push("/");
 
-    } catch (error: any) => {
+    } catch (error: any) {
       toast({
         title: "Sign-up Failed",
         description: error.message,
@@ -62,14 +55,14 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black p-4">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-md">
-        <Card className="bg-card border-border">
+        <Card>
           <CardHeader className="text-center">
-            <div className="mb-4 flex justify-center font-bold text-2xl">
-              DEV
+            <div className="mb-4 flex justify-center font-headline text-2xl font-bold text-primary">
+              ProComm Hub
             </div>
-            <CardTitle className="font-headline text-2xl">Join Nebbulon Hub</CardTitle>
+            <CardTitle className="font-headline text-2xl">Join ProComm Hub</CardTitle>
             <CardDescription>Create your account to start showcasing your work</CardDescription>
           </CardHeader>
           <CardContent>

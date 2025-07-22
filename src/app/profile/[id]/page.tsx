@@ -2,16 +2,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
 import { getUserProfile } from "@/lib/user-service";
 import type { User } from "@/lib/mock-data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AppLayout } from "@/components/app-layout";
 import { ProfileClientPage } from "@/components/profile-client-page";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function UserProfilePage({ params }: { params: { id: string } }) {
-  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
@@ -65,7 +64,3 @@ export default function UserProfilePage({ params }: { params: { id: string } }) 
     </AppLayout>
   );
 }
-
-// Dummy components to avoid breaking the code while refactoring
-const Card = ({children}: {children: React.ReactNode}) => <div className="bg-card rounded-lg border">{children}</div>
-const CardContent = ({children, className}: {children: React.ReactNode, className?: string}) => <div className={className}>{children}</div>

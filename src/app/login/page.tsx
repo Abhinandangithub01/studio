@@ -23,10 +23,6 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      toast({
-        title: "Login Successful",
-        description: "Welcome back!",
-      });
       router.push("/");
     } catch (error: any) {
       toast({
@@ -40,14 +36,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-black p-4">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-md">
-        <Card className="bg-card border-border">
+        <Card>
           <CardHeader className="text-center">
-             <div className="mb-4 flex justify-center font-bold text-2xl">
-              DEV
+             <div className="mb-4 flex justify-center font-headline text-2xl font-bold text-primary">
+              ProComm Hub
             </div>
-            <CardTitle className="font-headline text-2xl">Welcome back to Nebbulon Hub</CardTitle>
+            <CardTitle className="font-headline text-2xl">Welcome back</CardTitle>
             <CardDescription>Enter your credentials to access your account</CardDescription>
           </CardHeader>
           <CardContent>

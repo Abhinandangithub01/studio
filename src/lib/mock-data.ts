@@ -2,7 +2,9 @@ import { Timestamp } from "firebase/firestore";
 
 export type User = {
   id: string;
+  uid: string;
   name: string;
+  email: string;
   avatarUrl: string;
   bio: string;
   skills: string[];
@@ -10,9 +12,7 @@ export type User = {
   currentCompany?: string;
   currentRole?: string;
   education?: string;
-  linkedinUrl?: string;
-  youtubeUrl?: string;
-  githubUrl?: string;
+  createdAt: Timestamp;
 };
 
 export type Project = {
@@ -65,8 +65,7 @@ export type Badge = {
   icon: string;
 };
 
-export const mockUser: User = {
-  id: 'user-1',
+export const mockUser: Omit<User, 'id' | 'uid' | 'email' | 'createdAt'> = {
   name: 'Alex Doe',
   avatarUrl: 'https://placehold.co/128x128',
   bio: 'Product Manager & No-Code Builder passionate about creating intuitive digital experiences. Turning ideas into reality, one component at a time.',
@@ -189,7 +188,7 @@ export const mockComments: Comment[] = [
     }
 ]
 
-export const mockUsers: Record<string, Omit<User, 'id' | 'currentCompany' | 'currentRole' | 'education'>> = {
+export const mockUsers: Record<string, Omit<User, 'id' | 'currentCompany' | 'currentRole' | 'education' | 'uid' | 'email' | 'createdAt'>> = {
     'user-1': {
         name: 'Alex Doe',
         avatarUrl: 'https://placehold.co/128x128',
