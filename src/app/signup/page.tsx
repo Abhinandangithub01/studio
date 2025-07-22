@@ -60,9 +60,9 @@ export default function SignupPage() {
         <Card>
           <CardHeader className="text-center">
             <div className="mb-4 flex justify-center font-headline text-2xl font-bold text-primary">
-              ProComm Hub
+              Nebbulon
             </div>
-            <CardTitle className="font-headline text-2xl">Join ProComm Hub</CardTitle>
+            <CardTitle className="font-headline text-2xl">Join Nebbulon</CardTitle>
             <CardDescription>Create your account to start showcasing your work</CardDescription>
           </CardHeader>
           <CardContent>

@@ -41,7 +41,7 @@ export default function LoginPage() {
         <Card>
           <CardHeader className="text-center">
              <div className="mb-4 flex justify-center font-headline text-2xl font-bold text-primary">
-              ProComm Hub
+              Nebbulon
             </div>
             <CardTitle className="font-headline text-2xl">Welcome back</CardTitle>
             <CardDescription>Enter your credentials to access your account</CardDescription>

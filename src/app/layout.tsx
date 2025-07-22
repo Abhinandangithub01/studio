@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'ProComm Hub',
+  title: 'Nebbulon',
   description: 'A community platform for professionals.',
 };
 

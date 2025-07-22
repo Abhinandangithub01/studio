@@ -4,48 +4,48 @@
 
 @layer base {
   :root {
-    --background: 48 83% 94%; /* #F4F1DE */
-    --foreground: 198 22% 16%; /* #264653 */
-    --card: 48 83% 90%; /* A slightly darker beige */
-    --card-foreground: 198 22% 16%;
-    --popover: 48 83% 90%;
-    --popover-foreground: 198 22% 16%;
-    --primary: 198 39% 39%; /* #264653 */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 14 78% 61%; /* #E76F51 */
-    --secondary-foreground: 0 0% 98%;
-    --muted: 48 50% 85%;
-    --muted-foreground: 198 22% 30%;
-    --accent: 14 78% 61%; /* #E76F51 */
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 84% 60%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 198 10% 80%;
-    --input: 198 10% 85%;
-    --ring: 198 39% 39%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 198 22% 10%; /* A deep teal for dark mode background */
-    --foreground: 48 83% 94%; /* Light beige for text */
-    --card: 198 22% 13%;
-    --card-foreground: 48 83% 94%;
-    --popover: 198 22% 10%;
-    --popover-foreground: 48 83% 94%;
-    --primary: 198 39% 59%; /* A lighter teal for dark mode primary */
-    --primary-foreground: 48 83% 94%;
-    --secondary: 14 78% 61%; /* #E76F51 */
+    --background: 240 6% 10%; /* #1a1b1e */
+    --foreground: 0 0% 98%; /* #fafafa */
+    --card: 240 6% 12%; /* #1e1f22 */
+    --card-foreground: 0 0% 98%;
+    --popover: 240 6% 10%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 210 80% 60%; /* A nice blue for buttons */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 5% 25%; /* a lighter grey */
     --secondary-foreground: 0 0% 98%;
-    --muted: 198 22% 18%;
-    --muted-foreground: 48 50% 75%;
-    --accent: 14 78% 61%; /* #E76F51 */
+    --muted: 240 5% 18%; /* for muted backgrounds like input fields */
+    --muted-foreground: 240 5% 65%;
+    --accent: 240 5% 25%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 0 0% 98%;
-    --border: 198 22% 20%;
-    --input: 198 22% 20%;
-    --ring: 198 39% 59%;
+    --border: 240 5% 20%;
+    --input: 240 5% 20%;
+    --ring: 210 80% 60%;
   }
 }
 
