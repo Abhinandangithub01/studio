@@ -1,17 +1,50 @@
+
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { AppLayout } from "@/components/app-layout";
 import { ProjectCard } from "@/components/project-card";
 import { DiscussionCard } from "@/components/discussion-card";
-import { mockUser, mockProjects, mockPosts, mockBadges } from "@/lib/mock-data";
+import { mockProjects, mockPosts, mockBadges, type User } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Linkedin, Twitter, Link as LinkIcon, Edit, Award, Coffee, Youtube, Github } from "lucide-react";
+import { auth } from "@/lib/firebase";
+import { getUserProfile } from "@/lib/user-service";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
+
 
 export default function ProfilePage() {
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUser = async (uid: string) => {
+      setLoading(true);
+      const profile = await getUserProfile(uid);
+      setUser(profile);
+      setLoading(false);
+    };
+
+    const unsubscribe = auth.onAuthStateChanged((userAuth) => {
+      if (userAuth) {
+        fetchUser(userAuth.uid);
+      } else {
+        router.push('/login');
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
+
+
   const featuredProjects = mockProjects.filter(p => p.featured);
   const otherProjects = mockProjects.filter(p => !p.featured);
 
@@ -25,6 +58,27 @@ export default function ProfilePage() {
     }
   }
 
+  if (loading || !user) {
+    return <AppLayout>
+        <Card>
+            <CardContent className="p-6 flex flex-col md:flex-row gap-8">
+                <div className="md:w-1/4 flex flex-col items-center text-center">
+                    <Skeleton className="h-32 w-32 rounded-full mb-4"/>
+                    <Skeleton className="h-8 w-3/4 mb-2"/>
+                    <Skeleton className="h-4 w-1/2 mb-2"/>
+                    <Skeleton className="h-4 w-1/3"/>
+                </div>
+                <div className="md:w-3/4 space-y-4">
+                    <Skeleton className="h-6 w-1/4" />
+                    <Skeleton className="h-16 w-full" />
+                    <Skeleton className="h-6 w-1/4" />
+                    <Skeleton className="h-10 w-full" />
+                </div>
+            </CardContent>
+        </Card>
+    </AppLayout>
+  }
+
   return (
     <AppLayout>
       <div className="space-y-8">
@@ -32,15 +86,17 @@ export default function ProfilePage() {
           <CardContent className="p-6 flex flex-col md:flex-row gap-8">
             <div className="md:w-1/4 flex flex-col items-center text-center">
               <Avatar className="h-32 w-32 border-4 border-secondary mb-4">
-                <AvatarImage src={mockUser.avatarUrl} alt={mockUser.name} />
-                <AvatarFallback>{mockUser.name.charAt(0)}</AvatarFallback>
+                <AvatarImage src={user.avatarUrl} alt={user.name} />
+                <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
               </Avatar>
-              <h1 className="font-headline text-2xl font-bold">{mockUser.name}</h1>
-              <p className="text-muted-foreground">{mockUser.currentRole} at {mockUser.currentCompany}</p>
-              <p className="text-muted-foreground text-sm">{mockUser.education}</p>
+              <h1 className="font-headline text-2xl font-bold">{user.name}</h1>
+              <p className="text-muted-foreground">{user.currentRole} at {user.currentCompany}</p>
+              <p className="text-muted-foreground text-sm">{user.education}</p>
               <div className="mt-4 flex gap-2">
-                <Button size="sm">
-                  <Edit className="mr-2 h-4 w-4" /> Edit Profile
+                <Button size="sm" asChild>
+                  <Link href="/profile/edit">
+                    <Edit className="mr-2 h-4 w-4" /> Edit Profile
+                  </Link>
                 </Button>
                 <Button size="sm" variant="secondary">
                   <Coffee className="mr-2 h-4 w-4" /> Sponsor
@@ -50,12 +106,12 @@ export default function ProfilePage() {
             <div className="md:w-3/4 space-y-4">
               <div>
                 <h2 className="font-headline text-lg font-semibold">About Me</h2>
-                <p className="text-muted-foreground">{mockUser.bio}</p>
+                <p className="text-muted-foreground">{user.bio}</p>
               </div>
               <div>
                 <h3 className="font-headline text-md font-semibold mb-2">Skills</h3>
                 <div className="flex flex-wrap gap-2">
-                  {mockUser.skills.map(skill => (
+                  {user.skills.map(skill => (
                     <Badge key={skill} variant="outline">{skill}</Badge>
                   ))}
                 </div>
@@ -63,7 +119,7 @@ export default function ProfilePage() {
               <div>
                 <h3 className="font-headline text-md font-semibold mb-2">Socials</h3>
                 <div className="flex gap-4">
-                  {mockUser.socials.map(social => (
+                  {user.socials?.map(social => (
                     <Button key={social.name} variant="ghost" size="icon" asChild>
                       <a href={social.url} target="_blank" rel="noopener noreferrer">{getIcon(social.name)}</a>
                     </Button>
