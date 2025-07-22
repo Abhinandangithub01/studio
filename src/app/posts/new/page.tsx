@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { AppLayout } from "@/components/app-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,40 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Lightbulb, Loader2, X } from "lucide-react";
-import { getTagSuggestions } from "@/app/actions/suggest-tags";
-import { useToast } from "@/hooks/use-toast";
+import { X } from "lucide-react";
 
 export default function NewPostPage() {
   const [content, setContent] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
-  const [isPending, startTransition] = useTransition();
-  const { toast } = useToast();
-
-  const handleSuggestTags = () => {
-    if (content.trim().length < 50) {
-      toast({
-        title: "Content too short",
-        description: "Please write at least 50 characters to get tag suggestions.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    startTransition(async () => {
-      const suggested = await getTagSuggestions({ postContent: content });
-      if (suggested) {
-        setTags((prevTags) => [...new Set([...prevTags, ...suggested])]);
-      } else {
-        toast({
-          title: "Error",
-          description: "Could not fetch tag suggestions. Please try again.",
-          variant: "destructive",
-        });
-      }
-    });
-  };
 
   const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInput.trim() !== "") {
@@ -90,14 +62,6 @@ export default function NewPostPage() {
                   onChange={(e) => setTagInput(e.target.value)}
                   onKeyDown={handleTagInputKeyDown}
                 />
-                <Button variant="outline" onClick={handleSuggestTags} disabled={isPending}>
-                  {isPending ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <Lightbulb className="mr-2 h-4 w-4" />
-                  )}
-                  Suggest Tags
-                </Button>
               </div>
               <div className="flex flex-wrap gap-2 mt-2">
                 {tags.map((tag) => (
