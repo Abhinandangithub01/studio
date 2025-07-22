@@ -1,3 +1,4 @@
+
 export type User = {
   id: string;
   name: string;
@@ -25,6 +26,7 @@ export type Showcase = {
   imageUrl: string;
   tags: string[];
   upvotes: number;
+  createdAt: string;
 };
 
 export type Post = {
@@ -40,7 +42,7 @@ export type Post = {
 };
 
 export type Comment = {
-  id: string;
+  id:string;
   postId: string;
   userId: string;
   content: string;
@@ -76,6 +78,7 @@ export const mockShowcases: Showcase[] = [
     imageUrl: 'https://placehold.co/600x400',
     tags: ['UI/UX', 'E-commerce', 'Product Management'],
     upvotes: 128,
+    createdAt: "2023-10-26T10:00:00Z",
   },
   {
     id: 'proj-2',
@@ -85,6 +88,7 @@ export const mockShowcases: Showcase[] = [
     imageUrl: 'https://placehold.co/600x400',
     tags: ['SaaS', 'No-Code', 'Figma'],
     upvotes: 97,
+    createdAt: "2023-10-25T10:00:00Z",
   },
   {
     id: 'proj-3',
@@ -94,6 +98,7 @@ export const mockShowcases: Showcase[] = [
     imageUrl: 'https://placehold.co/600x400',
     tags: ['Mobile App', 'UI/UX', 'Wellness'],
     upvotes: 63,
+    createdAt: "2023-10-24T10:00:00Z",
   },
 ];
 

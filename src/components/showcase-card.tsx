@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import type { Showcase } from "@/lib/mock-data";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,9 +8,10 @@ import { ArrowUp } from "lucide-react";
 
 type ShowcaseCardProps = {
   showcase: Showcase;
+  onUpvote: (id: string) => void;
 };
 
-export function ShowcaseCard({ showcase }: ShowcaseCardProps) {
+export function ShowcaseCard({ showcase, onUpvote }: ShowcaseCardProps) {
   return (
     <Card className="flex flex-col">
       <CardHeader className="relative p-0">
@@ -28,7 +30,7 @@ export function ShowcaseCard({ showcase }: ShowcaseCardProps) {
                 <CardTitle className="font-headline text-xl mb-2">{showcase.title}</CardTitle>
                 <p className="text-muted-foreground text-sm mb-4">{showcase.description}</p>
             </div>
-            <Button variant="outline" className="flex flex-col h-auto p-2">
+            <Button variant="outline" className="flex flex-col h-auto p-2" onClick={() => onUpvote(showcase.id)}>
                 <ArrowUp className="h-4 w-4"/>
                 <span className="text-xs">{showcase.upvotes}</span>
             </Button>
