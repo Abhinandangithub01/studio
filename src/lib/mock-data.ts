@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 
 export type User = {
   id: string;
@@ -32,7 +33,7 @@ export type Showcase = {
   imageUrl: string;
   tags: string[];
   upvotes: number;
-  createdAt: string;
+  createdAt: Timestamp | string;
 };
 
 export type Post = {
@@ -41,10 +42,12 @@ export type Post = {
   title: string;
   content: string;
   tags: string[];
-  createdAt: string;
+  createdAt: Timestamp | string;
   views: number;
   reactions: number;
   commentsCount: number;
+  authorName?: string;
+  authorAvatar?: string;
 };
 
 export type Comment = {

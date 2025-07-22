@@ -1,6 +1,5 @@
 import Link from "next/link";
-import type { Post, User } from "@/lib/mock-data";
-import { mockUsers } from "@/lib/mock-data";
+import type { Post } from "@/lib/mock-data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,26 +11,25 @@ type DiscussionCardProps = {
 };
 
 export function DiscussionCard({ post }: DiscussionCardProps) {
-  const author = mockUsers[post.userId] as User | undefined;
-
+  const authorName = post.authorName || 'Anonymous';
+  const authorAvatar = post.authorAvatar;
+  
   return (
     <Card className="bg-card border-border">
       <CardHeader>
         <div className="flex items-center gap-4">
-          {author && (
-            <Avatar className="h-10 w-10 border">
-              <AvatarImage src={author.avatarUrl} alt={author.name} />
-              <AvatarFallback>{author.name.charAt(0)}</AvatarFallback>
-            </Avatar>
-          )}
+          <Avatar className="h-10 w-10 border">
+            {authorAvatar && <AvatarImage src={authorAvatar} alt={authorName} />}
+            <AvatarFallback>{authorName.charAt(0)}</AvatarFallback>
+          </Avatar>
           <div>
-            {author && <p className="font-semibold">{author.name}</p>}
-            <p className="text-sm text-muted-foreground">{post.createdAt}</p>
+            <p className="font-semibold">{authorName}</p>
+            <p className="text-sm text-muted-foreground">{post.createdAt as string}</p>
           </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-4 pl-16">
-        <Link href="/post" className="block">
+        <Link href={`/post/${post.id}`} className="block">
           <CardTitle className="font-headline text-2xl hover:text-primary">{post.title}</CardTitle>
         </Link>
         <div className="flex flex-wrap gap-2">
@@ -54,7 +52,7 @@ export function DiscussionCard({ post }: DiscussionCardProps) {
             </Button>
         </div>
         <Button asChild size="sm" variant="ghost" className="text-muted-foreground">
-            <Link href="/post">Read</Link>
+            <Link href={`/post/${post.id}`}>Read</Link>
         </Button>
       </CardFooter>
     </Card>
