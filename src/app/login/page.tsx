@@ -1,10 +1,18 @@
+
 "use client";
+
+/**
+ * @fileoverview This page provides the user login form.
+ * It handles email/password authentication using Firebase Auth.
+ */
 
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+
+// UI and Hook Imports
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,13 +26,20 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Handles the form submission for user login.
+   * @param e The form event.
+   */
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
+      // Sign in with Firebase Authentication
       await signInWithEmailAndPassword(auth, email, password);
+      // Redirect to the homepage on successful login
       router.push("/");
     } catch (error: any) {
+      // Display an error toast on failure
       toast({
         title: "Login Failed",
         description: error.message,

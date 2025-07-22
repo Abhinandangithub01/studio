@@ -1,10 +1,17 @@
 
 'use server';
 
+/**
+ * @fileoverview This file provides a service for managing user badges and achievements.
+ * For this demo, it uses a mock implementation, but it's structured for a real backend.
+ */
+
 import { db } from "@/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import type { Badge } from "./types";
 
+// A predefined list of all possible badges in the system.
+// In a real application, this could be stored in a 'badges' collection in Firestore.
 const mockBadges: Badge[] = [
   {
     id: 'badge-1',
@@ -32,13 +39,19 @@ const mockBadges: Badge[] = [
   },
 ];
 
-// In a real app, you would have logic to award badges to users.
-// For now, we'll just fetch a predefined list of possible badges.
+/**
+ * Fetches the badges a specific user has earned.
+ * @param userId The ID of the user whose badges to fetch.
+ * @returns A promise that resolves to an array of Badge objects.
+ * 
+ * @note This is a mock implementation for demonstration purposes. A real-world
+ * implementation would involve checking user statistics against badge criteria
+ * or fetching a list of earned badges from a user's subcollection in Firestore.
+ */
 export const getBadgesForUser = async (userId: string): Promise<Badge[]> => {
-    // This is placeholder logic. A real implementation would check user stats.
-    // For demonstration, we'll give the first user some badges.
+    // For this demo, we'll give every user all the badges to showcase the feature.
     if (userId) {
-         return mockBadges; // Return all badges for demonstration
+         return mockBadges;
     }
     return [];
 };

@@ -1,9 +1,19 @@
+/**
+ * @fileoverview This component defines the main layout structure for the authenticated part of the application.
+ * It includes the main header, a left sidebar for navigation, the main content area, and a right sidebar
+ * for supplementary information like trending posts.
+ */
+
 import type { ReactNode } from 'react';
 import { MainSidebar } from "@/components/main-sidebar";
 import { AppHeader } from "@/components/app-header";
 import { RightSidebar } from '@/components/right-sidebar';
 
-export function AppLayout({ children }: { children: ReactNode }) {
+type AppLayoutProps = {
+  children: ReactNode; // The main content to be rendered within the layout.
+};
+
+export function AppLayout({ children }: AppLayoutProps) {
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />

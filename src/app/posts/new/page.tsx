@@ -1,7 +1,16 @@
+
 "use client";
+
+/**
+ * @fileoverview Page for creating a new discussion post.
+ * Provides a form for users to input a title, content, and tags.
+ */
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { X } from "lucide-react";
+
+// Component Imports
 import { AppLayout } from "@/components/app-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +18,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { X } from "lucide-react";
+
+// Service & Hook Imports
 import { createPost } from "@/lib/post-service";
 import { useToast } from "@/hooks/use-toast";
 import { auth } from "@/lib/firebase";
@@ -23,18 +33,31 @@ export default function NewPostPage() {
   const [tagInput, setTagInput] = useState("");
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Handles adding a new tag when the user presses Enter in the tag input field.
+   * @param e The keyboard event.
+   */
   const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInput.trim() !== "") {
       e.preventDefault();
+      // Add the new tag, ensuring no duplicates.
       setTags([...new Set([...tags, tagInput.trim()])]);
       setTagInput("");
     }
   };
 
+  /**
+   * Removes a tag from the list.
+   * @param tagToRemove The tag to be removed.
+   */
   const removeTag = (tagToRemove: string) => {
     setTags(tags.filter((tag) => tag !== tagToRemove));
   };
 
+  /**
+   * Handles the form submission to create the new post.
+   * @param e The form event.
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const user = auth.currentUser;
@@ -69,7 +92,7 @@ export default function NewPostPage() {
             title: "Success!",
             description: "Your post has been published.",
         });
-        router.push("/");
+        router.push("/"); // Redirect to homepage after creation
     } catch (error) {
         console.error("Error creating post:", error);
         toast({
@@ -98,7 +121,7 @@ export default function NewPostPage() {
                 </div>
 
                 <div className="space-y-2">
-                <Label htmlFor="content">Content (Markdown supported)</Label>
+                <Label htmlFor="content">Content</Label>
                 <Textarea
                     id="content"
                     placeholder="Write your post here..."
@@ -124,7 +147,7 @@ export default function NewPostPage() {
                     {tags.map((tag) => (
                     <Badge key={tag} variant="secondary">
                         {tag}
-                        <button onClick={() => removeTag(tag)} className="ml-2">
+                        <button type="button" onClick={() => removeTag(tag)} className="ml-2">
                         <X className="h-3 w-3" />
                         </button>
                     </Badge>
@@ -133,7 +156,6 @@ export default function NewPostPage() {
                 </div>
 
                 <div className="flex justify-end gap-2">
-                    <Button variant="outline" type="button" disabled={loading}>Save Draft</Button>
                     <Button type="submit" disabled={loading}>
                         {loading ? 'Publishing...' : 'Publish Post'}
                     </Button>

@@ -1,26 +1,43 @@
 
 "use client";
 
+/**
+ * @fileoverview Defines the main application header.
+ * This component includes the site logo, navigation links (in a sheet for mobile),
+ * a search bar, and a user menu with options for profile, settings, and logout.
+ */
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { useToast } from "@/hooks/use-toast";
 import { Bell, CircleUser, Home, Menu, Presentation, Search, Trophy } from "lucide-react";
+
+// UI Component Imports
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useToast } from "@/hooks/use-toast";
 
 export function AppHeader() {
     const router = useRouter();
     const { toast } = useToast();
 
+    /**
+     * Handles the user logout process.
+     * Signs the user out from Firebase Auth and redirects to the login page.
+     */
     const handleLogout = async () => {
         try {
             await signOut(auth);
             router.push('/login');
+            toast({
+                title: "Logged Out",
+                description: "You have been successfully logged out.",
+            });
         } catch (error) {
+            console.error("Logout failed:", error);
             toast({
                 title: "Logout Failed",
                 description: "Something went wrong. Please try again.",
@@ -32,6 +49,7 @@ export function AppHeader() {
     return (
         <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6 sticky top-0 z-50">
             <div className="flex items-center gap-4">
+                {/* Mobile navigation menu (Sheet) */}
                 <Sheet>
                     <SheetTrigger asChild>
                         <Button variant="outline" size="icon" className="shrink-0 md:hidden">
@@ -56,10 +74,13 @@ export function AppHeader() {
                         </nav>
                     </SheetContent>
                 </Sheet>
+                {/* Desktop Logo */}
                 <Link href="/" className="hidden md:flex items-center gap-2 font-bold text-xl text-foreground">
                     Nebbulon
                 </Link>
             </div>
+            
+            {/* Search Bar */}
             <div className="flex-1 flex justify-center">
                 <form className="w-full max-w-sm">
                     <div className="relative">
@@ -68,6 +89,8 @@ export function AppHeader() {
                     </div>
                 </form>
             </div>
+
+            {/* Right-side actions: Create Post, Notifications, User Menu */}
             <div className="flex items-center gap-4">
                  <Link href="/posts/new">
                     <Button>
@@ -78,6 +101,7 @@ export function AppHeader() {
                     <Bell className="h-5 w-5" />
                     <span className="sr-only">Notifications</span>
                 </Button>
+                {/* User Dropdown Menu */}
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="secondary" size="icon" className="rounded-full">

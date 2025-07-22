@@ -1,6 +1,13 @@
+/**
+ * @fileoverview This component renders a card for a single discussion post.
+ * It displays the post's author, title, tags, and engagement stats (reactions, comments).
+ * It's used on the homepage and other feed-like pages.
+ */
 
 import Link from "next/link";
 import type { Post } from "@/lib/types";
+
+// UI Component Imports
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,10 +15,11 @@ import { Badge } from "@/components/ui/badge";
 import { MessageSquare, Heart } from "lucide-react";
 
 type DiscussionCardProps = {
-  post: Post;
+  post: Post; // The post data to display.
 };
 
 export function DiscussionCard({ post }: DiscussionCardProps) {
+  // Fallback for author name and avatar if they aren't available on the post object.
   const authorName = post.authorName || 'Anonymous';
   const authorAvatar = post.authorAvatar;
   
@@ -32,9 +40,11 @@ export function DiscussionCard({ post }: DiscussionCardProps) {
         </div>
       </CardHeader>
       <CardContent className="space-y-4 pl-16">
+        {/* Link to the full post page */}
         <Link href={`/post/${post.id}`} className="block">
           <CardTitle className="font-headline text-2xl hover:text-primary">{post.title}</CardTitle>
         </Link>
+        {/* Display post tags */}
         <div className="flex flex-wrap gap-2">
           {post.tags.map((tag) => (
             <Badge key={tag} variant="ghost" className="p-1 px-2 hover:bg-accent/50">
@@ -44,6 +54,7 @@ export function DiscussionCard({ post }: DiscussionCardProps) {
         </div>
       </CardContent>
       <CardFooter className="flex justify-between items-center pl-16">
+        {/* Engagement stats */}
         <div className="flex gap-4 text-muted-foreground">
             <Button variant="ghost" className="flex items-center gap-1.5 p-2 h-auto hover:bg-accent/50">
                 <Heart className="h-4 w-4" />
