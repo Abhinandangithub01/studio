@@ -8,16 +8,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { auth } from "@/lib/firebase";
 import { getUserProfile, updateUserProfile } from "@/lib/user-service";
-import type { User } from "@/lib/mock-data";
+import type { User } from "@/lib/types";
 import { AppLayout } from "@/components/app-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { X } from "lucide-react";
 
 const profileFormSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -29,7 +30,6 @@ const profileFormSchema = z.object({
   linkedinUrl: z.string().url("Please enter a valid URL.").optional().or(z.literal('')),
   youtubeUrl: z.string().url("Please enter a valid URL.").optional().or(z.literal('')),
   githubUrl: z.string().url("Please enter a valid URL.").optional().or(z.literal('')),
-  // We'll handle skills separately
 });
 
 export default function EditProfilePage() {
@@ -37,12 +37,15 @@ export default function EditProfilePage() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [skills, setSkills] = useState<string[]>([]);
+  const [skillInput, setSkillInput] = useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
       if (auth.currentUser) {
         const profile = await getUserProfile(auth.currentUser.uid);
         setUser(profile);
+        setSkills(profile?.skills || []);
       }
     };
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -86,6 +89,19 @@ export default function EditProfilePage() {
       });
     }
   }, [user, form]);
+  
+  const handleSkillInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && skillInput.trim() !== "") {
+      e.preventDefault();
+      setSkills([...new Set([...skills, skillInput.trim()])]);
+      setSkillInput("");
+    }
+  };
+
+  const removeSkill = (skillToRemove: string) => {
+    setSkills(skills.filter((skill) => skill !== skillToRemove));
+  };
+
 
   const onSubmit = async (values: z.infer<typeof profileFormSchema>) => {
     if (!auth.currentUser) return;
@@ -98,12 +114,12 @@ export default function EditProfilePage() {
     ].filter(s => s.url);
 
     try {
-      await updateUserProfile(auth.currentUser.uid, { ...values, socials });
+      await updateUserProfile(auth.currentUser.uid, { ...values, socials, skills });
       toast({
         title: "Profile Updated",
         description: "Your profile has been successfully updated.",
       });
-      router.push("/profile");
+      router.push(`/profile/${auth.currentUser.uid}`);
     } catch (error) {
       toast({
         title: "Update Failed",
@@ -214,6 +230,29 @@ export default function EditProfilePage() {
                         </FormItem>
                       )}
                     />
+                </div>
+                
+                 <div className="space-y-2">
+                    <FormLabel>Skills</FormLabel>
+                    <div className="flex items-center gap-2">
+                        <Input
+                        id="skills"
+                        placeholder="Type a skill and press Enter"
+                        value={skillInput}
+                        onChange={(e) => setSkillInput(e.target.value)}
+                        onKeyDown={handleSkillInputKeyDown}
+                        />
+                    </div>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                        {skills.map((skill) => (
+                        <Badge key={skill} variant="secondary">
+                            {skill}
+                            <button type="button" onClick={() => removeSkill(skill)} className="ml-2">
+                            <X className="h-3 w-3" />
+                            </button>
+                        </Badge>
+                        ))}
+                    </div>
                 </div>
 
                 <FormField

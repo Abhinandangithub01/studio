@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { AppLayout } from "@/components/app-layout";
 import { CommentSection } from "@/components/comment-section";
 import { getPost } from "@/lib/post-service";
-import type { Post } from "@/lib/mock-data";
+import type { Post } from "@/lib/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -99,7 +99,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
           </div>
         </article>
 
-        <CommentSection />
+        <CommentSection postId={post.id} />
       </div>
     </AppLayout>
   );

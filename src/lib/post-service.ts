@@ -3,10 +3,10 @@
 
 import { db } from "@/lib/firebase";
 import { collection, addDoc, getDocs, doc, getDoc, query, orderBy, serverTimestamp, Timestamp, limit, where, documentId } from "firebase/firestore";
-import type { Post } from "./mock-data";
+import type { Post } from "./types";
 import { getUserProfile, getFollowingIds } from "./user-service";
 
-type PostInput = Omit<Post, "id" | "createdAt" | "views" | "reactions" | "commentsCount">;
+type PostInput = Omit<Post, "id" | "createdAt" | "views" | "reactions" | "commentsCount" | "authorName" | "authorAvatar">;
 
 export const createPost = async (postData: PostInput) => {
     try {
@@ -41,6 +41,21 @@ export const getPosts = async (): Promise<Post[]> => {
     });
     return postList;
 };
+
+export const getPostsByUserId = async (userId: string): Promise<Post[]> => {
+    const postsCol = collection(db, "posts");
+    const q = query(postsCol, where("userId", "==", userId), orderBy("createdAt", "desc"));
+    const postSnapshot = await getDocs(q);
+    const postList = postSnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+            id: doc.id,
+            ...data,
+            createdAt: (data.createdAt as Timestamp)?.toDate ? (data.createdAt as Timestamp).toDate().toLocaleDateString() : 'Just now',
+        } as Post;
+    });
+    return postList;
+}
 
 export const getPostsFromFollowing = async(userId: string): Promise<Post[]> => {
     const followingIds = await getFollowingIds(userId);

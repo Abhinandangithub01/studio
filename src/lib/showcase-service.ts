@@ -1,7 +1,10 @@
 
+'use server';
+
 import { db } from "@/lib/firebase";
-import { collection, addDoc, getDocs, doc, updateDoc, increment, serverTimestamp, query, orderBy } from "firebase/firestore";
-import type { Showcase } from "./mock-data";
+import { collection, addDoc, getDocs, doc, updateDoc, increment, serverTimestamp, query, orderBy, where } from "firebase/firestore";
+import type { Showcase } from "./types";
+import { Timestamp } from "firebase/firestore";
 
 type ShowcaseInput = Omit<Showcase, "id" | "upvotes" | "createdAt">;
 
@@ -30,24 +33,42 @@ export const getShowcases = async (): Promise<Showcase[]> => {
             id: doc.id,
             ...data,
             // Convert Firestore Timestamp to a serializable format if necessary
-            createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
+            createdAt: (data.createdAt as Timestamp)?.toDate ? (data.createdAt as Timestamp).toDate().toISOString() : new Date().toISOString(),
         } as Showcase
     });
     return showcaseList;
 };
 
+// Get showcases by user
+export const getShowcasesByUserId = async(userId: string): Promise<Showcase[]> => {
+    const showcasesCol = collection(db, "showcases");
+    const q = query(showcasesCol, where("userId", "==", userId), orderBy("createdAt", "desc"));
+    const showcaseSnapshot = await getDocs(q);
+    const showcaseList = showcaseSnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+            id: doc.id,
+            ...data,
+            createdAt: (data.createdAt as Timestamp)?.toDate ? (data.createdAt as Timestamp).toDate().toISOString() : new Date().toISOString(),
+        } as Showcase
+    });
+    return showcaseList;
+}
+
 // Upvote a showcase
 export const upvoteShowcase = async (showcaseId: string): Promise<number> => {
     const showcaseRef = doc(db, "showcases", showcaseId);
     try {
+        // This is not transactional, so the returned value might be slightly off in high-concurrency scenarios.
+        // For this app, it's an acceptable trade-off for simplicity.
+        const showcaseSnap = await getDoc(showcaseRef);
+        const currentUpvotes = showcaseSnap.data()?.upvotes || 0;
+        
         await updateDoc(showcaseRef, {
             upvotes: increment(1)
         });
-        // Note: To return the new upvote count, we'd need another read (or a transaction).
-        // For simplicity, we'll just return a success indicator and let the client update the UI optimistically.
-        // Let's assume the update worked and the client can increment its local state.
-        // For a real app, you might want to use a transaction to get the updated value.
-        return 1; // Placeholder, real logic would fetch the updated doc.
+        
+        return currentUpvotes + 1;
     } catch (error) {
         console.error("Error upvoting showcase: ", error);
         throw new Error("Failed to upvote showcase");

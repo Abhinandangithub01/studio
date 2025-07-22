@@ -2,16 +2,17 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { AppLayout } from '@/components/app-layout';
 import { DiscussionCard } from '@/components/discussion-card';
-import type { Post } from '@/lib/mock-data';
+import type { Post } from '@/lib/types';
 import { getPosts, getPostsFromFollowing } from '@/lib/post-service';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { auth } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
+import { Edit } from 'lucide-react';
 
 export default function Home() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -49,7 +50,12 @@ export default function Home() {
     <AppLayout>
       <div className="flex flex-col gap-4">
         <Card className="p-4">
-          <Input placeholder="What's on your mind?" className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0" />
+           <Button asChild className="w-full justify-start">
+              <Link href="/posts/new">
+                <Edit className="mr-2 h-4 w-4" />
+                What's on your mind?
+              </Link>
+            </Button>
         </Card>
         <div className="flex items-center gap-4">
           <Button variant="ghost" onClick={() => setActiveTab('discover')} className={`font-bold text-lg p-0 h-auto hover:bg-transparent ${activeTab === 'discover' ? '' : 'text-muted-foreground'}`}>Discover</Button>
